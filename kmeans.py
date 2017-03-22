@@ -1,6 +1,10 @@
 from time import time
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn import metrics
+from sklearn.cluster import KMeans
+from sklearn.datasets import load_digits
+from sklearn.preprocessing import scale
 
 np.random.seed()
 digits = load_digits()
@@ -22,3 +26,9 @@ def bench_k_means(estimator, name, data):
     print('% 9s %.2fs %i %.3f %.3f %.3f %.3f'
             %(name, (time() - t0), estimator.inertia_,
                 metrics.homogeneity_score(labels, estimator.labels_),
+                metrics.completeness_score(labels, estimator.labels_),
+                metrics.v_measure_score(labels, estimator.labels_),
+                metrics.adjusted_rand_score(data,estimator.labels_),
+                metrics.silhouette_score(data, estimator.labels_,
+                    metric='euclidean',
+                    sample_size=sample_size)))
